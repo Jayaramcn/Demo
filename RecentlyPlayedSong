@@ -1,0 +1,37 @@
+package test;
+import java.util.*;
+
+public class RecentlyPlayedSong extends RecentlyPlayedSongTest {
+    private int capacity; // Maximum capacity of the store
+    private Map<String, List<String>> store; // Map to store user-song pairs
+    private List<String> recentlyPlayed; // List to track recently played songs
+
+    public RecentlyPlayedSong(int initialCapacity) {
+        capacity = initialCapacity;
+        store = new HashMap<>(); // Initialize the store as an empty HashMap
+        recentlyPlayed = new ArrayList<>(); // Initialize the list of recently played songs as an empty ArrayList
+    }
+
+    public void playSong(String user, String song) {
+        if (!store.containsKey(user)) { // If the user is not in the store
+            store.put(user, new ArrayList<>()); // Add the user to the store with an empty list of songs
+        }
+
+        List<String> userSongs = store.get(user); // Get the list of songs for the user
+        userSongs.remove(song); // Remove the song from the user's list (to handle duplicate plays)
+
+        if (recentlyPlayed.size() >= capacity) { // If the store is already at capacity
+            String evictedSong = recentlyPlayed.remove(0); // Remove the least recently played song from recentlyPlayed
+            userSongs.remove(evictedSong); // Remove the evicted song from the user's list of songs
+        }
+
+        recentlyPlayed.add(song); // Add the song to the end of recentlyPlayed
+        userSongs.add(song); // Add the song to the user's list of songs
+    }
+
+    public List<String> getRecentlyPlayed(String user) {
+        return store.getOrDefault(user, new ArrayList<>()); // Return the list of songs for the user (or an empty list if user not found)
+    }
+    
+    
+}
