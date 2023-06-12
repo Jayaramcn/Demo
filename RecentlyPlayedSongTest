@@ -1,0 +1,35 @@
+package test;
+import org.testng.annotations.Test;
+import org.testng.Assert;
+import java.util.Arrays;
+import java.util.List;
+
+public class RecentlyPlayedSongTest
+{
+    @Test
+    public void testRecentlyPlayedSongs() {
+        RecentlyPlayedSong store = new RecentlyPlayedSong(3);
+
+        store.playSong("User1", "S1");
+        store.playSong("User1", "S2");
+        store.playSong("User1", "S3");
+        List<String> user1Songs = store.getRecentlyPlayed("User1");
+        Assert.assertEquals(user1Songs, Arrays.asList("S1", "S2", "S3"), //Assert.assertEquals is used to check the expected results against the actual results obtained from the getRecentlyPlayed method
+            "Incorrect recently played songs for User1.");
+
+        store.playSong("User1", "S4");
+        user1Songs = store.getRecentlyPlayed("User1");
+        Assert.assertEquals(user1Songs, Arrays.asList("S2", "S3", "S4"),
+            "Incorrect recently played songs for User1.");
+
+        store.playSong("User1", "S2");
+        user1Songs = store.getRecentlyPlayed("User1");
+        Assert.assertEquals(user1Songs, Arrays.asList("S3", "S4", "S2"),
+            "Incorrect recently played songs for User1.");
+
+        store.playSong("User1", "S1");
+        user1Songs = store.getRecentlyPlayed("User1");
+        Assert.assertEquals(user1Songs, Arrays.asList("S4", "S2", "S1"),
+            "Incorrect recently played songs for User1.");
+    }
+}
